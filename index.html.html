@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jy.hnteacher.net</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .image-container {
+            max-width: 100%;
+            max-height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100vh;
+            object-fit: contain;
+        }
+        
+        /* 加载动画 */
+        .loader {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            z-index: 10;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 屏幕方向提示 (仅在需要时显示) */
+        .orientation-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 针对超小屏幕的优化 */
+        @media (max-width: 320px) {
+            img {
+                max-height: 95vh;
+            }
+        }
+        
+        /* 针对平板和横屏模式的优化 */
+        @media (min-width: 768px) and (orientation: landscape) {
+            img {
+                max-height: 95vh;
+                max-width: 95vw;
+            }
+        }
+        
+        /* 在非常小的竖屏设备上显示方向提示 */
+        @media (max-height: 400px) and (orientation: portrait) {
+            .orientation-warning {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader"></div>
+    
+    <div class="image-container">
+        <!-- 使用Unsplash的随机图片API，您可以替换为您的图片URL -->
+        <img src="https://img.cdn1.vip/i/68adbf157b495_1756217109.png" alt="全屏展示的图片" id="mainImage">
+    </div>
+    
+    <div class="orientation-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M7 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1h-4V2z"/>
+            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-2 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+        </svg>
+        <p style="margin-top: 20px;">请将设备转为横屏以获得最佳观看效果</p>
+    </div>
+
+    <script>
+        // 图片加载完成后隐藏加载动画
+        document.getElementById('mainImage').onload = function() {
+            document.getElementById('loader').style.display = 'none';
+        };
+        
+        // 如果图片加载失败，也隐藏加载动画
+        document.getElementById('mainImage').onerror = function() {
+            document.getElementById('loader').style.display = 'none';
+        };
+        
+        // 监听屏幕方向变化
+        window.addEventListener('orientationchange', function() {
+            // 刷新页面以适应新的方向
+            setTimeout(function() {
+                window.location.reload();
+            }, 300);
+        });
+    </script>
+</body>
+</html>
